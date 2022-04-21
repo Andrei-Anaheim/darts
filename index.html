@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Darts</title>
+</head>
+<body>
+    <div class="test hide" id="test_round"></div>
+    <div class="game_settings" id="game_settings">
+        <p class="title">МГ Дартс</p>
+        <select class="player_count" id="player_count">
+            <option selected>Выберите число игроков</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+        </select>
+        <div class="players_name" id="players_name"></div>
+        <div class="start_button hide" id="start_button">Начать игру</div>
+    </div>
+    <div class="game_field hide" id="game_field">
+        <div class="table_field" id="table_field"></div>
+        <div class="darts_field" id="darts_field">
+            <div class="darts disabled" id="darts"></div>
+            <div class="turn_info">
+                <div class="turn_info_container" id="turn_info_container">
+                    <p>Текущий ход: <span id="current_player"></span></p>
+                    <p>Осталось: <span id="current_player_left"></span></p>
+                    <div class="throw hide" id="throw_1_container">
+                        <p>Бросок 1: <span id="throw_1"></span></p>
+                        <div class="delete_button" id="delete_1">Удалить</div>
+                    </div>
+                    <div class="throw hide" id="throw_2_container">
+                        <p>Бросок 2: <span id="throw_2"></span></p>
+                        <div class="delete_button" id="delete_2">Удалить</div>
+                    </div>
+                    <div class="throw hide" id="throw_3_container">
+                        <p>Бросок 3: <span id="throw_3"></span></p>
+                        <div class="delete_button" id="delete_3">Удалить</div>
+                    </div>
+                    <div class="throw" id="throw_sum_container">
+                        <p>Сумма: <span id="throw_sum"></span></p>
+                    </div>
+                </div>
+                <div class="next_turn disabled" id="next_turn">Следующий ход</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

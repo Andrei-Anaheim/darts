@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+}
+
+.test {
+    position: absolute;
+    border-radius: 50%;
+    background-color: yellow;
+    opacity: 0.3;
+    /* height: 17px;
+    width: 17px;
+    left: 1269px;
+    top: 260px; */
+}
+
+.title {
+    text-align: center;
+    color: white;
+    font: normal normal 40px/40px Arial;
+    padding: 10vh 0;
+}
+
+.game_settings {
+    height: 100vh;
+    width: 100vw;
+    padding: 20px;
+    border: 5px solid green;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player_count {
+    font: normal normal 40px/40px Arial;
+    text-align: center;
+    margin: 5vh 0;
+    width: 30vw;
+}
+
+.players_name {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+}
+
+.write_name {
+    border: 1px solid pink;
+    font: normal normal 30px/30px Arial;
+    margin: 5px 0;
+}
+
+.start_button {
+    background-color: grey;
+    margin-top: 10px;
+    padding: 5px;
+    font: normal normal 40px/40px Arial;
+    cursor: pointer;
+}
+
+.game_field {
+    display: flex;
+    flex-direction: row; 
+    /* border: 5px solid blue; */
+    height: 100vh;
+    width: 100vw;
+}
+
+.table_field {
+    display: flex;
+    flex-direction: row; 
+    /* border: 1px solid yellow; */
+    height: 100%;
+    width: 60%;
+    overflow-y: scroll;
+}
+
+.supertable {
+    width: 100%;
+    border: 1px solid red;
+}
+.superrow {
+    height: 5vh;
+}
+
+.ordercell {
+    color: white;
+    font: normal normal 10px/10px Arial;
+    text-align: center;
+    width: 50px;
+    border: 1px solid blueviolet;
+}
+
+.supercell {
+    border: 1px solid green;
+    color: white;
+    font: normal normal 30px/30px Arial;
+    text-align: center;
+}
+
+.darts_field {
+    display: flex;
+    flex-direction: column; 
+    /* border: 1px solid yellow; */
+    height: 100%;
+    width: 40%;
+}
+
+.darts {
+    height: 70%;
+    width: 100%;
+    background-image: url(/darts.png);
+    background-size: 500px 500px;
+    background-position-x: center;
+    background-repeat: no-repeat;  
+}
+
+.turn_info {
+    display: flex;
+    flex-direction: column;
+    height: 25%;
+    color: white;
+    text-align: center;
+    font: normal bold 25px/25px Arial;
+}
+
+.turn_info_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+}
+
+.throw {
+    display: flex;
+    flex-direction: row;
+    margin: 5px 0;
+    justify-content: center;
+}
+
+.delete_button {
+    margin-left: 80px;
+    background-color: grey;
+    font: normal normal 25px/25px Arial;
+    cursor: pointer;
+}
+
+.next_turn {
+    background-color: red;
+    font: normal normal 30px/30px Arial;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.marker {
+    position: absolute;
+    font: normal bold 15px/15px Arial;
+    color:yellow;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+.hide {
+    display: none;
+}
