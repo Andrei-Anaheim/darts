@@ -196,7 +196,7 @@ function clearTestRound() {
     document.getElementById('test_round').classList.add('hide');
 }
 
-/* Изменить результат броска */
+/* Изменить результат броска 111*/
 // document.getElementById('change_1').addEventListener('click',change1)
 // // document.getElementById('throw_1_input').addEventListener('change',change1Transform)
 // function change1() {
