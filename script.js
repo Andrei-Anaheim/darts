@@ -1,5 +1,9 @@
 /*Константы */
 const player_points = [501,501,501,501,501,501];
+const all_points = {1:[],2:[],3:[],4:[],5:[],6:[]};
+const final_countdown = {1:[],2:[],3:[],4:[],5:[],6:[]};
+const coords = {1:{x:[],y:[]},2:{x:[],y:[]},3:{x:[],y:[]},4:{x:[],y:[]},5:{x:[],y:[]},6:{x:[],y:[]}};
+const game_finished = [1,1,1,1,1,1];
 
 /*После выбора числа игроков написать имена*/
 document.getElementById('player_count').addEventListener('change', addNames);
@@ -14,6 +18,7 @@ function addNames() {
             names.className = 'write_name';
             names.id = `name_${i+1}`
             document.getElementById('players_name').appendChild(names);
+            game_finished[i] = 0;
         }
         document.getElementById('start_button').classList.remove('hide');
     }
@@ -111,23 +116,28 @@ function throwDart(e) {
     if (dart_left === 3) {
         document.getElementById('throw_1').innerText = `${result}`;
         document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_sum').innerText = `${result}`;
+        // document.getElementById('throw_sum').innerText = `${result}`;
         marker.id = 'marker_1';
     } else if (dart_left === 2) {
         document.getElementById('throw_2').innerText = `${result}`;
         document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_sum').innerText = `${result+Number(document.getElementById('throw_sum').innerText)}`;
+        // document.getElementById('throw_sum').innerText = `${result+Number(document.getElementById('throw_sum').innerText)}`;
         marker.id = 'marker_2';
     } else if (dart_left === 1) {
         document.getElementById('throw_3').innerText = `${result}`;
         document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_sum').innerText = `${result+Number(document.getElementById('throw_sum').innerText)}`;
+        // document.getElementById('throw_sum').innerText = `${result+Number(document.getElementById('throw_sum').innerText)}`;
         marker.id = 'marker_3';
         document.getElementById('darts').classList.add('disabled');
         document.getElementById('next_turn').classList.remove('disabled');
     }
     dart_left -=1;
     document.body.appendChild(marker);
+    updateLeft(result,p0c, current_player);
+    if (game_finished[current_player-1] === 0) {
+        coords[current_player].x.push(p0.x-2);
+        coords[current_player].y.push(p0.y-7);
+    }
 }
 
 /* Переход хода */
@@ -136,9 +146,11 @@ function newMove() {
     document.getElementById('next_turn').classList.add('disabled');
     const sum = document.getElementById('throw_sum').innerText;
     player_points[current_player-1] -= sum;
+    all_points[current_player].push(sum);
+    final_countdown[current_player].push(player_points[current_player-1]);
     document.querySelectorAll('.superrow')[current_move_number].children[current_player].innerText = `${sum}/${player_points[current_player-1]}`;
     if (Number(current_player) === Number(document.getElementById('player_count').value)) {
-        current_player = 1;
+        current_player = game_finished.indexOf(0)+1;
         current_move_number +=1;
     } else {
         current_player += 1;
@@ -154,6 +166,24 @@ function newMove() {
     nextTurn()
 }
 
+/* Обновить графу "Осталось" при бросках */
+function updateLeft(score,distance, player) {
+    const currentLeft = Number(document.getElementById('current_player_left').innerText);
+    if (Number(score) === currentLeft && ((distance > 179 && distance <190)||distance<7.5)) {
+        document.getElementById('result_text').innerText = `${document.getElementById(`name_${player}`).value} завершил игру`;
+        document.getElementById('result_text').classList.remove('hide');
+        setTimeout(()=>{document.getElementById('result_text').classList.add('hide')},3000);
+        game_finished[player-1] = 1;
+        document.getElementById('next_turn').classList.remove('disabled');
+        document.getElementById('current_player_left').innerText = `${currentLeft - Number(score)}`;
+        document.getElementById('throw_sum').innerText = `${score+Number(document.getElementById('throw_sum').innerText)}`;
+    }
+    if (Number(score) < currentLeft && currentLeft-Number(score)>1) {
+        document.getElementById('current_player_left').innerText = `${currentLeft - Number(score)}`;
+        document.getElementById('throw_sum').innerText = `${score+Number(document.getElementById('throw_sum').innerText)}`;
+    }
+}
+
 /*Тестировочный круг, добавить потом кнопку его вызова*/
 function testRound(width) {
     const test = document.getElementById('test_round');
@@ -165,3 +195,17 @@ function testRound(width) {
 function clearTestRound() {
     document.getElementById('test_round').classList.add('hide');
 }
+
+/* Изменить результат броска */
+// document.getElementById('change_1').addEventListener('click',change1)
+// // document.getElementById('throw_1_input').addEventListener('change',change1Transform)
+// function change1() {
+//     /*Убрать из суммы, массивам по броскам */
+//     document.getElementById('throw_1_container').children[0].innerHTML = '<p>Бросок 1: <input id="throw_1_input"></input></p>'
+//     document.getElementById('throw_1_input').addEventListener('change',change1Transform);
+// }
+// function change1Transform() {
+//     /*Добавить в сумму, массивы по броскам */
+//     const x = document.getElementById('throw_1_input').value;
+//     document.getElementById('throw_1_container').children[0].innerHTML = `<p>Бросок 1: <span id="throw_1">${x}</span></p>`;
+// }

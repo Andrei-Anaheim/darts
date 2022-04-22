@@ -21,16 +21,21 @@ body {
 
 .title {
     text-align: center;
-    color: white;
-    font: normal normal 40px/40px Arial;
+    color: red;
+    font: normal bold 60px/60px Arial;
     padding: 10vh 0;
 }
 
 .game_settings {
+    background: url(/darts.png);
+    background-color: rgba(255,255,255,0.5);
+    background-blend-mode: lighten;
+    background-repeat: no-repeat;
+    background-position-x: center;
     height: 100vh;
     width: 100vw;
     padding: 20px;
-    border: 5px solid green;
+    /* border: 5px solid green; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,6 +48,10 @@ body {
     width: 30vw;
 }
 
+select, option , input {
+   background-color: aqua; 
+}
+
 .players_name {
     display: flex;
     flex-direction: column;
@@ -53,10 +62,11 @@ body {
     border: 1px solid pink;
     font: normal normal 30px/30px Arial;
     margin: 5px 0;
+    background-color: aqua;
 }
 
 .start_button {
-    background-color: grey;
+    background-color: red;
     margin-top: 10px;
     padding: 5px;
     font: normal normal 40px/40px Arial;
@@ -149,6 +159,13 @@ body {
     cursor: pointer;
 }
 
+.change_button {
+    margin-left: 10px;
+    background-color: grey;
+    font: normal normal 25px/25px Arial;
+    cursor: pointer;
+}
+
 .next_turn {
     background-color: red;
     font: normal normal 30px/30px Arial;
@@ -160,6 +177,19 @@ body {
     position: absolute;
     font: normal bold 15px/15px Arial;
     color:yellow;
+}
+
+.result_text {
+    position: absolute;
+    width: 100vw;
+    height:50px;
+    padding: 10px;
+    top: 50%;
+    text-align: center;
+    background-color: aqua;
+    opacity: 0.8;
+    color: white;
+    font: normal normal 30px/30px Arial;
 }
 
 .disabled {
