@@ -64,12 +64,43 @@ function nextTurn() {
     document.getElementById('test_round').classList.add('hide');
     document.getElementById('current_player').innerText = `${document.getElementById(`name_${current_player}`).value}`;
     document.getElementById('current_player_left').innerText = `${player_points[current_player-1]}`;
+    let player_finishing = 0;
+    document.getElementById('current_player_finishing').classList.add('hide');
+    if(player_points[current_player-1]<171) {
+        if (player_points[current_player-1]<41 && player_points[current_player-1]%2===0) player_finishing=`D${player_points[current_player-1]/2}`;
+        else if (player_points[current_player-1]<41 && player_points[current_player-1]%2!==0) player_finishing=`1 D${(player_points[current_player-1]-1)/2}`;
+        else if (player_points[current_player-1]==50) player_finishing=`Bull`;
+        else if (player_points[current_player-1]<61) player_finishing=`${player_points[current_player-1]-40} D20`;
+        else if (player_points[current_player-1]<99 && player_points[current_player-1]%2===0) player_finishing=`T20 D${(player_points[current_player-1]-60)/2}`;
+        else if (player_points[current_player-1]<99 && player_points[current_player-1]%2!==0) player_finishing=`T19 D${(player_points[current_player-1]-57)/2}`;
+        else if (player_points[current_player-1]==100) player_finishing=`T20 D20`;
+        else if (player_points[current_player-1]<159) {
+            if (player_points[current_player-1]-60<41 && (player_points[current_player-1]-60)%2===0) player_finishing=`T20 D${(player_points[current_player-1]-60)/2}`;
+            else if (player_points[current_player-1]-60<41 && (player_points[current_player-1]-60)%2!==0) player_finishing=`T20 1 D${(player_points[current_player-1]-61)/2}`;
+            else if (player_points[current_player-1]-60==50) player_finishing=`T20 Bull`;
+            else if (player_points[current_player-1]-60<61) player_finishing=`T20 ${player_points[current_player-1]-100} D20`;
+            else if (player_points[current_player-1]-60<99 && (player_points[current_player-1]-60)%2===0) player_finishing=`T20 T20 D${(player_points[current_player-1]-120)/2}`;
+            else if (player_points[current_player-1]-60<99 && (player_points[current_player-1]-60)%2!==0) player_finishing=`T20 T19 D${(player_points[current_player-1]-117)/2}`;
+            }
+        else if (player_points[current_player-1]==160) player_finishing=`T20 T20 D20`;
+        else if (player_points[current_player-1]==161) player_finishing=`T20 T17 Bull`;
+        else if (player_points[current_player-1]==164) player_finishing=`T20 T18 Bull`;
+        else if (player_points[current_player-1]==167) player_finishing=`T20 T19 Bull`;
+        else if (player_points[current_player-1]==170) player_finishing=`T20 T20 Bull`;
+        if (player_finishing!==0) {
+            document.getElementById('current_player_finishing').classList.remove('hide');
+        }
+    }
+    
+    
+    document.getElementById('current_player_finishing').innerText = `(${player_finishing})`;
     document.getElementById('darts').classList.remove('disabled');
 }
 
 /*Бросок дротика*/
 document.getElementById('darts').addEventListener('click', (e) => {throwDart(e)});
 function throwDart(e) {
+    console.log('бросаю');
     let result = 0;
     const c = {x: darts_center_x, y: darts_center_y}
     const p0 = {x: e.clientX, y: e.clientY};
@@ -133,7 +164,7 @@ function throwDart(e) {
     }
     dart_left -=1;
     document.body.appendChild(marker);
-    updateLeft(result,p0c, current_player);
+    updateLeft(result,p0c, current_player,dart_left);
     if (game_finished[current_player-1] === 0) {
         coords[current_player].x.push(p0.x-2);
         coords[current_player].y.push(p0.y-7);
@@ -167,8 +198,9 @@ function newMove() {
 }
 
 /* Обновить графу "Осталось" при бросках */
-function updateLeft(score,distance, player) {
+function updateLeft(score,distance, player, dart_left) {
     const currentLeft = Number(document.getElementById('current_player_left').innerText);
+    document.getElementById('current_player_finishing').classList.add('hide');
     if (Number(score) === currentLeft && ((distance > 179 && distance <190)||distance<7.5)) {
         document.getElementById('result_text').innerText = `${document.getElementById(`name_${player}`).value} завершил игру`;
         document.getElementById('result_text').classList.remove('hide');
@@ -179,8 +211,25 @@ function updateLeft(score,distance, player) {
         document.getElementById('throw_sum').innerText = `${score+Number(document.getElementById('throw_sum').innerText)}`;
     }
     if (Number(score) < currentLeft && currentLeft-Number(score)>1) {
+        let current_player_left = Number(currentLeft - Number(score));
         document.getElementById('current_player_left').innerText = `${currentLeft - Number(score)}`;
         document.getElementById('throw_sum').innerText = `${score+Number(document.getElementById('throw_sum').innerText)}`;
+        let player_finishing = 0;
+        if (dart_left==2) {
+            if (current_player_left<41 && current_player_left%2===0) player_finishing=`D${current_player_left/2}`;
+            else if (current_player_left<41 && current_player_left%2!==0) player_finishing=`1 D${(current_player_left-1)/2}`;
+            else if (current_player_left==50) player_finishing=`Bull`;
+            else if (current_player_left<61) player_finishing=`${current_player_left-40} D20`;
+            else if (current_player_left<99 && current_player_left%2===0) player_finishing=`T20 D${(current_player_left-60)/2}`;
+            else if (current_player_left<99 && current_player_left%2!==0) player_finishing=`T19 D${(current_player_left-57)/2}`;
+            else if (current_player_left==100) player_finishing=`T20 D20`;
+            else if (current_player_left==110) player_finishing=`T20 Bull`;
+        } else if (dart_left==1) {
+            if (current_player_left<41 && current_player_left%2===0) player_finishing=`D${current_player_left/2}`;
+            else if (current_player_left==50) player_finishing=`Bull`;
+        }
+        document.getElementById('current_player_finishing').innerText = `(${player_finishing})`;
+        if (player_finishing!==0) document.getElementById('current_player_finishing').classList.remove('hide');
     }
 }
 
@@ -196,16 +245,75 @@ function clearTestRound() {
     document.getElementById('test_round').classList.add('hide');
 }
 
-/* Изменить результат броска 111*/
-// document.getElementById('change_1').addEventListener('click',change1)
-// // document.getElementById('throw_1_input').addEventListener('change',change1Transform)
-// function change1() {
-//     /*Убрать из суммы, массивам по броскам */
-//     document.getElementById('throw_1_container').children[0].innerHTML = '<p>Бросок 1: <input id="throw_1_input"></input></p>'
-//     document.getElementById('throw_1_input').addEventListener('change',change1Transform);
-// }
-// function change1Transform() {
-//     /*Добавить в сумму, массивы по броскам */
-//     const x = document.getElementById('throw_1_input').value;
-//     document.getElementById('throw_1_container').children[0].innerHTML = `<p>Бросок 1: <span id="throw_1">${x}</span></p>`;
-// }
+/* Удалить результат броска. Реализовать удаление маркеров и координат броска из общего пула координат игрока*/
+document.getElementById('delete_1').addEventListener('click',delete1)
+function delete1() {
+    if (dart_left==2) {
+        dart_left=3;
+        const fix_number = -Number(document.getElementById('throw_1').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_1').innerText = ``;
+        document.getElementById('throw_1_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_1'));
+    }
+    if (dart_left==1) {
+        dart_left=2;
+        const fix_number = -Number(document.getElementById('throw_1').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_1').innerText = `${document.getElementById('throw_2').innerText}`;
+        document.getElementById('throw_2').innerText = ``;
+        document.getElementById('throw_2_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_1'));
+        document.getElementById('marker_2').id = 'marker_1';
+    }
+    if (dart_left==0) {
+        document.getElementById('darts').classList.remove('disabled');
+        document.getElementById('next_turn').classList.add('disabled');
+        dart_left=1;
+        const fix_number = -Number(document.getElementById('throw_1').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_1').innerText = `${document.getElementById('throw_2').innerText}`;
+        document.getElementById('throw_2').innerText = `${document.getElementById('throw_3').innerText}`;
+        document.getElementById('throw_3').innerText = ``;
+        document.getElementById('throw_3_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_1'));
+        document.getElementById('marker_2').id = 'marker_1';
+        document.getElementById('marker_3').id = 'marker_2';
+    }
+}
+document.getElementById('delete_2').addEventListener('click',delete2)
+function delete2() {
+    if (dart_left==1) {
+        dart_left=2;
+        const fix_number = -Number(document.getElementById('throw_2').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_2').innerText = ``;
+        document.getElementById('throw_2_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_2'));
+    }
+    if (dart_left==0) {
+        document.getElementById('darts').classList.remove('disabled');
+        document.getElementById('next_turn').classList.add('disabled');
+        dart_left=1;
+        const fix_number = -Number(document.getElementById('throw_2').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_2').innerText = `${document.getElementById('throw_3').innerText}`;
+        document.getElementById('throw_3').innerText = ``;
+        document.getElementById('throw_3_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_2'));
+        document.getElementById('marker_3').id = 'marker_2';
+    }
+}
+document.getElementById('delete_3').addEventListener('click',delete3)
+function delete3() {
+    if (dart_left==0) {
+        document.getElementById('darts').classList.remove('disabled');
+        document.getElementById('next_turn').classList.add('disabled');
+        dart_left=1;
+        const fix_number = -Number(document.getElementById('throw_3').innerText);
+        updateLeft(fix_number,10, current_player, dart_left);
+        document.getElementById('throw_3').innerText = ``;
+        document.getElementById('throw_3_container').classList.add('hide');
+        document.body.removeChild(document.getElementById('marker_3'));
+    }
+}
