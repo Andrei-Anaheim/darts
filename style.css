@@ -148,21 +148,26 @@ select, option , input {
 .throw {
     display: flex;
     flex-direction: row;
-    margin: 5px 0;
+    margin: 3px 0;
     justify-content: center;
+    font: normal bold 20px/20px Arial;
+}
+.throw_result {
+    width: 130px;
+    text-align: left;
 }
 
 .delete_button {
     margin-left: 80px;
     background-color: grey;
-    font: normal normal 25px/25px Arial;
+    font: normal normal 20px/20px Arial;
     cursor: pointer;
 }
 
 .change_button {
     margin-left: 10px;
     background-color: grey;
-    font: normal normal 25px/25px Arial;
+    font: normal normal 20px/20px Arial;
     cursor: pointer;
 }
 
