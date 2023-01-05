@@ -317,7 +317,3 @@ function delete3() {
         document.body.removeChild(document.getElementById('marker_3'));
     }
 }
-
-document.body.removeChild(document.getElementById('marker_1'));
-    document.body.removeChild(document.getElementById('marker_2'));
-    document.body.removeChild(document.getElementById('marker_3'));
