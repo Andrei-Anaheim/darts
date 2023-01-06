@@ -9,9 +9,34 @@
 </head>
 <body>
     <div class="test hide" id="test_round"></div>
-    <div class="result_text hide" id="result_text"></div>
+    <div class="result_box hide" id="result_box">
+        <div class="result_text" id="result_text"></div>
+        <div class="result_buttons">
+            <div class="button" id="finish">Закончить</div>
+            <div class="button" id="continue_this_row">Доиграть раунд</div>
+            <div class="button" id="continue_till_loser">Играть до последнего проигравшего</div>
+        </div> 
+    </div>
+    <div class="final_result hide" id="final_result">
+        <table class="result_table" id="result_table">
+            <tbody>
+                <tr class="result_row">
+                    <td class="res_ordercell">№</td>
+                    <td class="res_supercell">Участник</td>
+                    <td class="res_supercell">Результат</td>
+                    <td class="res_supercell">Раунды</td>
+                    <td class="res_supercell">Ср. бросок (до 170)</td>
+                    <td class="res_supercell">Лучший бросок</td>
+                    <td class="res_supercell">Закрытие</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="button new_game_button" id="new_game">Новая игра</div>
+    </div>
+    
     <div class="game_settings" id="game_settings">
         <p class="title">МГ Дартс</p>
+        <input id="input_pass" class="password"></input>
         <select class="player_count" id="player_count">
             <option selected>Выберите число игроков</option>
             <option>1</option>
@@ -33,17 +58,17 @@
                     <p>Текущий ход: <span id="current_player"></span></p>
                     <p>Осталось: <span id="current_player_left"></span> <span class="hide" id="current_player_finishing"></span></p>
                     <div class="throw hide" id="throw_1_container">
-                        <p class="throw_result">Бросок 1: <span id="throw_1"></span></p>
+                        <p class="throw_result">Бросок 1: <span id="throw_1"></span> <span class="hide" id="throw_1_real"></span></p>
                         <div class="delete_button" id="delete_1">Удалить</div>
                         <!-- <div class="change_button" id="change_1">Изменить</div> -->
                     </div>
                     <div class="throw hide" id="throw_2_container">
-                        <p class="throw_result">Бросок 2: <span id="throw_2"></span></p>
+                        <p class="throw_result">Бросок 2: <span id="throw_2"></span><span class="hide" id="throw_2_real"></span></p>
                         <div class="delete_button" id="delete_2">Удалить</div>
                         <!-- <div class="change_button" id="change_2">Изменить</div> -->
                     </div>
                     <div class="throw hide" id="throw_3_container">
-                        <p class="throw_result">Бросок 3: <span id="throw_3"></span></p>
+                        <p class="throw_result">Бросок 3: <span id="throw_3"></span><span class="hide" id="throw_3_real"></span></p>
                         <div class="delete_button" id="delete_3">Удалить</div>
                         <!-- <div class="change_button" id="change_3">Изменить</div> -->
                     </div>
