@@ -567,3 +567,4 @@ function continue_game_till_loser() {
     document.getElementById('result_box').classList.add('hide');
     /* закрыть это окно, каждый бросок проверять, что в игре больше 1 человека, если ложь, то остановить, отправить результаты, заблочить кнопки */
 }
+
