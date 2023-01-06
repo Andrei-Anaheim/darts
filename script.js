@@ -304,6 +304,8 @@ function updateLeft(score,distance, player, dart_left) {
         if (game_status[0]!==3) {
             document.getElementById('result_text').innerText = `${document.getElementById(`name_${player}`).value} завершил игру`;
             document.getElementById('result_box').classList.remove('hide');
+            document.getElementById('fireworks').classList.remove('hide');
+            document.getElementById('fireworks').play();
         }
         // setTimeout(()=>{document.getElementById('result_text').classList.add('hide')},3000);
         game_finished[player-1] = 1;
@@ -482,6 +484,8 @@ function editSpreadSheet() {
 document.getElementById('finish').addEventListener('click',finish_game);
 function finish_game() {
     // game_status[0]=1;
+    document.getElementById('fireworks').classList.add('hide');
+    document.getElementById('fireworks').pause();
     document.getElementById('darts').classList.add('disabled');
     document.getElementById('next_turn').classList.add('disabled');
     document.getElementById('result_box').classList.add('hide');
@@ -543,6 +547,8 @@ function upgateGameResult() {
 
 document.getElementById('continue_this_row').addEventListener('click',finish_game_after_row);
 function finish_game_after_row() {
+    document.getElementById('fireworks').classList.add('hide');
+    document.getElementById('fireworks').pause();
     game_status[0]=2;
     const players_number = document.getElementById('player_count').value;
     for (let i=0; i<players_number; i+=1) {
@@ -551,9 +557,12 @@ function finish_game_after_row() {
         }
     }
     document.getElementById('result_box').classList.add('hide');
+    if (Number(current_player)===1) finish_game();
 }
 document.getElementById('continue_till_loser').addEventListener('click',continue_game_till_loser);
 function continue_game_till_loser() {
+    document.getElementById('fireworks').classList.add('hide');
+    document.getElementById('fireworks').pause();
     game_status[0]=3;
     document.getElementById('result_box').classList.add('hide');
     /* закрыть это окно, каждый бросок проверять, что в игре больше 1 человека, если ложь, то остановить, отправить результаты, заблочить кнопки */
