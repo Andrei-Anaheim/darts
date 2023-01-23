@@ -182,7 +182,7 @@ function createStatistics(period) {
         let negative = arr1.filter(elem =>(elem < 0)).length;
         if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[workers.length+6].innerText = `${positive} - ${negative}`
         else document.querySelectorAll('.superrow_s')[i+1].children[workers.length+6].innerText = ``;
-        if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[workers.length+7].innerText = `${Math.round(positive/(positive+negative)*100)}%`
+        if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[workers.length+7].innerText = `${Math.round(positive/(positive+negative)*100)}% (${positive}/${positive+negative})`
         else document.querySelectorAll('.superrow_s')[i+1].children[workers.length+7].innerText = ``;
     }
     
