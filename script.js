@@ -3,8 +3,13 @@ const player_points = [501,501,501,501,501,501];
 const coords = {1:{x:[],y:[]},2:{x:[],y:[]},3:{x:[],y:[]},4:{x:[],y:[]},5:{x:[],y:[]},6:{x:[],y:[]}};
 const game_finished = [1,1,1,1,1,1];
 const workers = [];
+const workers_id = [];
 const game_result=[];
 const last_leg = [50];
+let winners = 1;
+let losers = 1;
+let totalsum = 1;
+const archive = [];
 const game_status =[0]; /* Варианты game (0) - игра, 
 finish(1) - первый закрылся и выбран режим окончания, 
 last_round(2) - первый закрылся, но у тех кто после него есть шанс на ничью
@@ -21,6 +26,7 @@ function getWorkers() {
         const length = data2.table.rows.length;
         for (let i=1; i<length; i+=1) {
             workers.push(data2.table.rows[i].c[0].v)
+            workers_id.push(data2.table.rows[i].c[1].v);
         }
     })
     // fetch('https://sheetdb.io/api/v1/cm1u7k6z6rd10?sheet=resulttable')
@@ -28,9 +34,214 @@ function getWorkers() {
     // .then((data) => console.log(data));
 }
 window.onload = getWorkers();
-
+window.onload = getStatistics();
 /*После выбора числа игроков написать имена*/
 document.getElementById('player_count').addEventListener('change', addNames);
+document.getElementById('input_pass').addEventListener('change',showStatButton);
+/*Блок статистики */
+function showStatButton() {
+    if(document.getElementById('input_pass').value=="MG1") {
+        document.getElementById('statistics_button').classList.remove('hide');
+    }
+}
+document.getElementById('statistics_button').addEventListener('click',showStatisticsPage);
+document.getElementById('statistics_from_end').addEventListener('click',showStatisticsPageTimeGap);
+
+function showStatisticsPageTimeGap() {
+    archive.length=0;
+    document.getElementById('body').classList.add('loading');
+    getStatistics();
+    setTimeout(()=>{
+        document.getElementById('body').classList.remove('loading');
+        showStatisticsPage()
+    },3500);
+}
+
+function showStatisticsPage () {
+    document.getElementById('game_settings').classList.add('hide');
+    document.getElementById('game_field').classList.add('hide');
+    document.getElementById('final_result').classList.add('hide');
+    createStatisticsTable();
+    document.getElementById('statistics').classList.remove('hide');
+    showStatistics(3);
+}
+document.getElementById('1day').addEventListener('click', function() {showStatistics(1)});
+document.getElementById('1month').addEventListener('click',function() {showStatistics(2)});
+document.getElementById('alltime').addEventListener('click',function() {showStatistics(3)});
+function showStatistics(period) {
+    if (period == 1) {
+        document.getElementById('1day').classList.add('active');
+        document.getElementById('1month').classList.remove('active');
+        document.getElementById('alltime').classList.remove('active');
+        createStatistics(1);
+    } else if (period == 2) {
+        document.getElementById('1day').classList.remove('active');
+        document.getElementById('1month').classList.add('active');
+        document.getElementById('alltime').classList.remove('active');
+        createStatistics(2);
+    } else {
+        document.getElementById('1day').classList.remove('active');
+        document.getElementById('1month').classList.remove('active');
+        document.getElementById('alltime').classList.add('active');
+        createStatistics(3);
+    }
+}
+
+function createStatisticsTable() {
+    const table = document.createElement('table');
+    table.className = 'supertable_s';
+    const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const players_column_width = (width - 50) / (workers.length + 4);
+    const headers = ['Игрок','Лучший бросок', 'Лучшее закрытие', 'Быстрая победа', 'Лучший ср.170','Общий счет', '% побед'];
+    for (let i=0; i<=workers.length; i+=1) {
+        const tr = table.insertRow();
+        tr.className = 'superrow_s';
+        for (let j=0; j<=workers.length+7; j+=1) {
+            const td = tr.insertCell();
+            if (j===0) {
+                td.className = 'ordercell_s';
+                if (i>0) td.appendChild(document.createTextNode(`${i}`))
+            } else {
+                if (j===1 && i>0) td.appendChild(document.createTextNode(`${workers[i-1]}`))
+                td.className = 'supercell_s';
+                if (i>0 && i===(j-5)) td.classList.add('colored');
+                td.style.width = `${players_column_width}px`;
+                if (i===0) {
+                    if (j<6) td.appendChild(document.createTextNode(`${headers[j-1]}`));
+                    else if (j>(5+workers.length)) td.appendChild(document.createTextNode(`${headers[j-1-workers.length]}`));
+                    else td.appendChild(document.createTextNode(`${workers[j-6]}`));
+                }
+            };
+        }
+    }
+    document.getElementById('statistics_field').appendChild(table);
+}
+
+function createStatistics(period) {
+    const timegap = period==1? 12*60*60*1000: period==2? 24*30*60*60*1000 : Infinity; 
+    for (let i=0; i<workers.length; i+=1) {
+        const arr1 = archive.filter((el)=> (el.player1 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot1)})
+        const arr2 = archive.filter((el)=> (el.player2 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot2)})
+        const arr3 = archive.filter((el)=> (el.player3 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot3)})
+        const arr4 = archive.filter((el)=> (el.player4 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot4)})
+        const arr5 = archive.filter((el)=> (el.player5 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot5)})
+        const arr6 = archive.filter((el)=> (el.player6 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot6)})
+        let result = arr1.concat(arr2).concat(arr3).concat(arr4).concat(arr5).concat(arr6);
+        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[2].innerText = `${Math.max.apply(null, result)}`
+        else document.querySelectorAll('.superrow_s')[i+1].children[2].innerText = ``;
+    }
+    for (let i=0; i<workers.length; i+=1) {
+        const arr1 = archive.filter((el)=> (el.player1 == workers[i] && !isNaN(el.finish1) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish1)})
+        const arr2 = archive.filter((el)=> (el.player2 == workers[i] && !isNaN(el.finish2) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish2)})
+        const arr3 = archive.filter((el)=> (el.player3 == workers[i] && !isNaN(el.finish3) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish3)})
+        const arr4 = archive.filter((el)=> (el.player4 == workers[i] && !isNaN(el.finish4) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish4)})
+        const arr5 = archive.filter((el)=> (el.player5 == workers[i] && !isNaN(el.finish5) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish5)})
+        const arr6 = archive.filter((el)=> (el.player6 == workers[i] && !isNaN(el.finish6) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.finish6)})
+        let result = arr1.concat(arr2).concat(arr3).concat(arr4).concat(arr5).concat(arr6);
+        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[3].innerText = `${Math.max.apply(null, result)}`
+        else document.querySelectorAll('.superrow_s')[i+1].children[3].innerText = ``;
+    }
+    for (let i=0; i<workers.length; i+=1) {
+        const arr1 = archive.filter((el)=> (el.player1 == workers[i] && !isNaN(el.round1) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round1)})
+        const arr2 = archive.filter((el)=> (el.player2 == workers[i] && !isNaN(el.round2) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round2)})
+        const arr3 = archive.filter((el)=> (el.player3 == workers[i] && !isNaN(el.round3) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round3)})
+        const arr4 = archive.filter((el)=> (el.player4 == workers[i] && !isNaN(el.round4) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round4)})
+        const arr5 = archive.filter((el)=> (el.player5 == workers[i] && !isNaN(el.round5) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round5)})
+        const arr6 = archive.filter((el)=> (el.player6 == workers[i] && !isNaN(el.round6) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.round6)})
+        let result = arr1.concat(arr2).concat(arr3).concat(arr4).concat(arr5).concat(arr6);
+        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[4].innerText = `${Math.min.apply(null, result)}`
+        else document.querySelectorAll('.superrow_s')[i+1].children[4].innerText = ``;
+    }
+    for (let i=0; i<workers.length; i+=1) {
+        const arr1 = archive.filter((el)=> (el.player1 == workers[i] && !isNaN(el.avg1701) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1701)})
+        const arr2 = archive.filter((el)=> (el.player2 == workers[i] && !isNaN(el.avg1702) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1702)})
+        const arr3 = archive.filter((el)=> (el.player3 == workers[i] && !isNaN(el.avg1703) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1703)})
+        const arr4 = archive.filter((el)=> (el.player4 == workers[i] && !isNaN(el.avg1704) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1704)})
+        const arr5 = archive.filter((el)=> (el.player5 == workers[i] && !isNaN(el.avg1705) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1705)})
+        const arr6 = archive.filter((el)=> (el.player6 == workers[i] && !isNaN(el.avg1706) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1706)})
+        let result = arr1.concat(arr2).concat(arr3).concat(arr4).concat(arr5).concat(arr6);
+        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[5].innerText = `${Math.max.apply(null, result)}`
+        else document.querySelectorAll('.superrow_s')[i+1].children[5].innerText = ``;
+    }
+    for (let i=0; i<workers.length; i+=1) {
+        for (let j=0; j<workers.length; j+=1) {
+            const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0 && (el.losers*el.winners)%workers_id[j] == 0 && i!=j  && (new Date() - new Date(el.date) < timegap)).map((el)=> {
+                return el.losers%workers_id[i]==0 && el.winners%workers_id[j]==0 ? -1: el.losers%workers_id[j]==0 && el.winners%workers_id[i]==0? 1 : 0; 
+            })
+            let positive = arr1.filter(elem =>(elem > 0)).length;
+            let negative = arr1.filter(elem =>(elem < 0)).length;
+            if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[j+6].innerText = `${positive} - ${negative}`
+            else document.querySelectorAll('.superrow_s')[i+1].children[j+6].innerText = ``;
+        }
+    }
+    for (let i=0; i<workers.length; i+=1) {
+        const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0   && (new Date() - new Date(el.date) < timegap)).map((el)=> {
+            return el.losers%workers_id[i]==0? -1: el.winners%workers_id[i]==0? 1 : 0; 
+        })
+        let positive = arr1.filter(elem =>(elem > 0)).length;
+        let negative = arr1.filter(elem =>(elem < 0)).length;
+        if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[workers.length+6].innerText = `${positive} - ${negative}`
+        else document.querySelectorAll('.superrow_s')[i+1].children[workers.length+6].innerText = ``;
+        if (arr1.length >0) document.querySelectorAll('.superrow_s')[i+1].children[workers.length+7].innerText = `${Math.round(positive/(positive+negative)*100)}%`
+        else document.querySelectorAll('.superrow_s')[i+1].children[workers.length+7].innerText = ``;
+    }
+    
+}
+
+function getStatistics() {
+    const url = `https://docs.google.com/spreadsheets/d/1AdB_r8gGwHfgd7MUdf03U9kUzK8yk9KzjW7B9MLaH3w/gviz/tq?gid=1749488065`;
+    fetch(url)
+    .then(res => res.text())
+    .then(rep => {
+        const data2 = JSON.parse(rep.substr(47).slice(0,-2));
+        const length = data2.table.rows.length;
+        for (let i=0; i<length; i+=1) {
+            const game = new Object();
+            game.date = data2.table.rows[i].c[0] ? data2.table.rows[i].c[0].v : "-";
+            game.player1 = data2.table.rows[i].c[1] ? data2.table.rows[i].c[1].v : "-";
+            game.result1 = data2.table.rows[i].c[2] ? data2.table.rows[i].c[2].v : "-";
+            game.round1 = data2.table.rows[i].c[3] ? data2.table.rows[i].c[3].v : "-";
+            game.avg1701 = data2.table.rows[i].c[4] ? data2.table.rows[i].c[4].v : "-";
+            game.bestshot1 = data2.table.rows[i].c[5] ? data2.table.rows[i].c[5].v : "-";
+            game.finish1 = data2.table.rows[i].c[6] ? data2.table.rows[i].c[6].v : "-";
+            game.player2 = data2.table.rows[i].c[7] ? data2.table.rows[i].c[7].v : "-";
+            game.result2 = data2.table.rows[i].c[8] ? data2.table.rows[i].c[8].v : "-";
+            game.round2 = data2.table.rows[i].c[9] ? data2.table.rows[i].c[9].v : "-";
+            game.avg1702 = data2.table.rows[i].c[10] ? data2.table.rows[i].c[10].v : "-";
+            game.bestshot2 = data2.table.rows[i].c[11] ? data2.table.rows[i].c[11].v : "-";
+            game.finish2 = data2.table.rows[i].c[12] ? data2.table.rows[i].c[12].v : "-";
+            game.player3 = data2.table.rows[i].c[13] ? data2.table.rows[i].c[13].v : "-";
+            game.result3 = data2.table.rows[i].c[14] ? data2.table.rows[i].c[14].v : "-";
+            game.round3 = data2.table.rows[i].c[15] ? data2.table.rows[i].c[15].v : "-";
+            game.avg1703 = data2.table.rows[i].c[16] ? data2.table.rows[i].c[16].v : "-";
+            game.bestshot3 = data2.table.rows[i].c[17] ? data2.table.rows[i].c[17].v : "-";
+            game.finish3 = data2.table.rows[i].c[18] ? data2.table.rows[i].c[18].v : "-";
+            game.player4 = data2.table.rows[i].c[19] ? data2.table.rows[i].c[19].v : "-";
+            game.result4 = data2.table.rows[i].c[20] ? data2.table.rows[i].c[20].v : "-";
+            game.round4 = data2.table.rows[i].c[21] ? data2.table.rows[i].c[21].v : "-";
+            game.avg1704 = data2.table.rows[i].c[22] ? data2.table.rows[i].c[22].v : "-";
+            game.bestshot4 = data2.table.rows[i].c[23] ? data2.table.rows[i].c[23].v : "-";
+            game.finish4 = data2.table.rows[i].c[24] ? data2.table.rows[i].c[24].v : "-";
+            game.player5 = data2.table.rows[i].c[25] ? data2.table.rows[i].c[25].v : "-";
+            game.result5 = data2.table.rows[i].c[26] ? data2.table.rows[i].c[26].v : "-";
+            game.round5 = data2.table.rows[i].c[27] ? data2.table.rows[i].c[27].v : "-";
+            game.avg1705 = data2.table.rows[i].c[28] ? data2.table.rows[i].c[28].v : "-";
+            game.bestshot5 = data2.table.rows[i].c[29] ? data2.table.rows[i].c[29].v : "-";
+            game.finish5 = data2.table.rows[i].c[30] ? data2.table.rows[i].c[30].v : "-";
+            game.player6 = data2.table.rows[i].c[31] ? data2.table.rows[i].c[31].v : "-";
+            game.result6 = data2.table.rows[i].c[32] ? data2.table.rows[i].c[32].v : "-";
+            game.round6 = data2.table.rows[i].c[33] ? data2.table.rows[i].c[33].v : "-";
+            game.avg1706 = data2.table.rows[i].c[34] ? data2.table.rows[i].c[34].v : "-";
+            game.bestshot6 = data2.table.rows[i].c[35] ? data2.table.rows[i].c[35].v : "-";
+            game.finish6 = data2.table.rows[i].c[36] ? data2.table.rows[i].c[36].v : "-";
+            game.winners = data2.table.rows[i].c[37] ? data2.table.rows[i].c[37].v : "-";
+            game.losers = data2.table.rows[i].c[38] ? data2.table.rows[i].c[38].v : "-";;
+            game.players = data2.table.rows[i].c[39] ? data2.table.rows[i].c[39].v : "-";
+            archive.push(game);
+        }
+    })
+}
+
 function addNames() {
     document.getElementById('players_name').innerHTML='';
     document.getElementById('start_button').classList.add('hide');
@@ -47,6 +258,7 @@ function addNames() {
                     let option = document.createElement('option');
                     option.value = workers[i];
                     option.text = workers[i];
+                    option.id = workers_id[i];
                     names.appendChild(option);
                 }
                 game_finished[i] = 0;
@@ -76,6 +288,7 @@ function startGame() {
         game_finished[i]=0;
         const person = new Object();
         person.name = document.getElementById(`name_${i+1}`).value;
+        person.id = workers_id[workers.indexOf(document.getElementById(`name_${i+1}`).value)];
         person.result = 0;
         person.finished = 0;
         person.round = '-';
@@ -85,6 +298,7 @@ function startGame() {
         person.shots=[];
         person.remains=[];
         game_result.push(person);
+        totalsum *= person.id;
     }
     for (let i=0; i<6-players_number; i+=1) {
         const person = new Object();
@@ -425,6 +639,7 @@ function delete3() {
 
 /* Меню с результатами */
 document.getElementById('new_game').addEventListener('click',new_game);
+document.getElementById('return').addEventListener('click',new_game);
 function new_game() {
     window.location.reload();
 }
@@ -439,7 +654,7 @@ function editSpreadSheet() {
         body: JSON.stringify({
             data: [
                 {
-                    'date': `${new Date().toLocaleString()}`,
+                    'date': `${new Date().toISOString()}`,
                     'player1': `${game_result[0].name}`,
                     'result1': `${game_result[0].result}`,
                     'round1': `${game_result[0].round}`,
@@ -476,6 +691,9 @@ function editSpreadSheet() {
                     'avg1706': `${game_result[5].average170}`,
                     'bestshot6': `${game_result[5].best}`,
                     'finish6': `${game_result[5].close}`,
+                    'winner': `${winners}`,
+                    'losers': `${totalsum/winners}`,
+                    'players': `${document.getElementById('player_count').value}`,
                 }
             ]
         })
@@ -509,6 +727,7 @@ function upgateGameResult() {
         if (game_result[i].finished==1) {
             if (game_status[0]!=3 || (game_status[0]==3 && count_legs[i]==Math.min(...count_legs))){
                 game_result[i].result=1;
+                winners *= Number(game_result[i].id);
             } else {
                 game_result[i].result=0;
             }
