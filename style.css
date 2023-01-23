@@ -97,15 +97,24 @@ select, option , input {
     overflow-y: scroll;
 }
 
-.supertable {
+.statistics_field {
+    display: flex;
+    flex-direction: row; 
+    /* border: 1px solid yellow; */
+    height: 100%;
+    width: 95%;
+    margin: 10px auto;
+}
+
+.supertable, .supertble_s {
     width: 100%;
     border: 1px solid red;
 }
-.superrow {
+.superrow, .superrow_s {
     height: 5vh;
 }
 
-.ordercell {
+.ordercell, .ordercell_s {
     color: white;
     font: normal normal 10px/10px Arial;
     text-align: center;
@@ -117,6 +126,13 @@ select, option , input {
     border: 1px solid green;
     color: white;
     font: normal normal 30px/30px Arial;
+    text-align: center;
+}
+
+.supercell_s {
+    border: 1px solid green;
+    color: white;
+    font: normal normal 20px/20px Arial;
     text-align: center;
 }
 
@@ -202,10 +218,13 @@ select, option , input {
     top: 40%;
     text-align: center;
     background-color: rgb(33, 43, 43);
-    opacity: 0.95;
+    opacity: 0.5;
     color: white;
     font: normal normal 30px/30px Arial;
     z-index: 100;
+}
+.result_box:hover {
+    opacity:0.8;
 }
 
 .result_buttons {
@@ -277,8 +296,46 @@ select, option , input {
     width: 100vw;
 }
 
+.statistics_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.time_button {
+    height: 40px;
+    margin: 10px;
+    padding: 5px;
+    font: normal normal 20px/20px Arial;
+    cursor: pointer;
+    width: 150px;
+}
+
+.return_button {
+    height: 40px;
+    margin: 10px;
+    padding: 5px;
+    font: normal normal 20px/20px Arial;
+    cursor: pointer;
+    width: 150px;
+}
+
+.active {
+    font-weight: bold;
+    background-color:rgb(17, 106, 109);
+    cursor: default;
+}
+
 .disabled {
     pointer-events: none;
+}
+
+.colored {
+    background-color: darkgray;
+}
+
+.loading {
+    cursor: wait;
 }
 
 .hide {
