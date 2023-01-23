@@ -234,6 +234,15 @@ select, option , input {
     height: 50px;
     margin-top: 20px;
 }
+
+.end_result_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 50px;
+    margin-top: 20px;
+    width: 80%;
+}
 .button {
     display: flex;
     align-items: center;
