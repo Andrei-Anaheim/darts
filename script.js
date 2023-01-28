@@ -10,6 +10,8 @@ let winners = 1;
 let losers = 1;
 let totalsum = 1;
 const archive = [];
+const time_filter_status = [3];
+const quantity_players_status = [0];
 const game_status =[0]; /* Варианты game (0) - игра, 
 finish(1) - первый закрылся и выбран режим окончания, 
 last_round(2) - первый закрылся, но у тех кто после него есть шанс на ничью
@@ -63,36 +65,94 @@ function showStatisticsPage () {
     document.getElementById('final_result').classList.add('hide');
     createStatisticsTable();
     document.getElementById('statistics').classList.remove('hide');
-    showStatistics(3);
+    showStatistics(3,quantity_players_status[0]);
 }
-document.getElementById('1day').addEventListener('click', function() {showStatistics(1)});
-document.getElementById('1month').addEventListener('click',function() {showStatistics(2)});
-document.getElementById('alltime').addEventListener('click',function() {showStatistics(3)});
-function showStatistics(period) {
+document.getElementById('1day').addEventListener('click', function() {showStatistics(1,quantity_players_status[0])});
+document.getElementById('1month').addEventListener('click',function() {showStatistics(2,quantity_players_status[0])});
+document.getElementById('alltime').addEventListener('click',function() {showStatistics(3,quantity_players_status[0])});
+function showStatistics(period,quantaty) {
     if (period == 1) {
         document.getElementById('1day').classList.add('active');
         document.getElementById('1month').classList.remove('active');
         document.getElementById('alltime').classList.remove('active');
-        createStatistics(1);
+        time_filter_status[0]=1;
+        
     } else if (period == 2) {
         document.getElementById('1day').classList.remove('active');
         document.getElementById('1month').classList.add('active');
         document.getElementById('alltime').classList.remove('active');
-        createStatistics(2);
+        time_filter_status[0]=2;
     } else {
         document.getElementById('1day').classList.remove('active');
         document.getElementById('1month').classList.remove('active');
         document.getElementById('alltime').classList.add('active');
-        createStatistics(3);
+        time_filter_status[0]=3;
     }
+    if (quantaty == 0) {
+        document.getElementById('allmatches').classList.add('active');
+        document.getElementById('2persons').classList.remove('active');
+        document.getElementById('3persons').classList.remove('active');
+        document.getElementById('4persons').classList.remove('active');
+        document.getElementById('5persons').classList.remove('active');
+        document.getElementById('6persons').classList.remove('active');
+        quantity_players_status[0] = 0;
+    } else if (quantaty == 2) {
+        document.getElementById('allmatches').classList.remove('active');
+        document.getElementById('2persons').classList.add('active');
+        document.getElementById('3persons').classList.remove('active');
+        document.getElementById('4persons').classList.remove('active');
+        document.getElementById('5persons').classList.remove('active');
+        document.getElementById('6persons').classList.remove('active');
+        quantity_players_status[0] = 2;
+    } else if (quantaty == 3) {
+        document.getElementById('allmatches').classList.remove('active');
+        document.getElementById('2persons').classList.remove('active');
+        document.getElementById('3persons').classList.add('active');
+        document.getElementById('4persons').classList.remove('active');
+        document.getElementById('5persons').classList.remove('active');
+        document.getElementById('6persons').classList.remove('active');
+        quantity_players_status[0] = 3;
+    } else if (quantaty == 4) {
+        document.getElementById('allmatches').classList.remove('active');
+        document.getElementById('2persons').classList.remove('active');
+        document.getElementById('3persons').classList.remove('active');
+        document.getElementById('4persons').classList.add('active');
+        document.getElementById('5persons').classList.remove('active');
+        document.getElementById('6persons').classList.remove('active');
+        quantity_players_status[0] = 4;
+    } else if (quantaty == 5) {
+        document.getElementById('allmatches').classList.remove('active');
+        document.getElementById('2persons').classList.remove('active');
+        document.getElementById('3persons').classList.remove('active');
+        document.getElementById('4persons').classList.remove('active');
+        document.getElementById('5persons').classList.add('active');
+        document.getElementById('6persons').classList.remove('active');
+        quantity_players_status[0] = 5;
+    } else {
+        document.getElementById('allmatches').classList.remove('active');
+        document.getElementById('2persons').classList.remove('active');
+        document.getElementById('3persons').classList.remove('active');
+        document.getElementById('4persons').classList.remove('active');
+        document.getElementById('5persons').classList.remove('active');
+        document.getElementById('6persons').classList.add('active');
+        quantity_players_status[0] = 6;
+    } 
+    createStatistics(period,quantaty);
 }
+
+document.getElementById('2persons').addEventListener('click', function() {showStatistics(time_filter_status[0],2)});
+document.getElementById('3persons').addEventListener('click', function() {showStatistics(time_filter_status[0],3)});
+document.getElementById('4persons').addEventListener('click', function() {showStatistics(time_filter_status[0],4)});
+document.getElementById('5persons').addEventListener('click', function() {showStatistics(time_filter_status[0],5)});
+document.getElementById('6persons').addEventListener('click', function() {showStatistics(time_filter_status[0],6)});
+document.getElementById('allmatches').addEventListener('click', function() {showStatistics(time_filter_status[0],0)});
 
 function createStatisticsTable() {
     const table = document.createElement('table');
     table.className = 'supertable_s';
     const width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     const players_column_width = (width - 50) / (workers.length + 4);
-    const headers = ['Игрок','Лучший бросок', 'Лучшее закрытие', 'Быстрая победа', 'Лучший ср.170','Общий счет', '% побед'];
+    const headers = ['Игрок','Лучший бросок', 'Лучшее закрытие', 'Быстрая победа', 'Лучший/Сред. 170','Общий счет', '% побед'];
     for (let i=0; i<=workers.length; i+=1) {
         const tr = table.insertRow();
         tr.className = 'superrow_s';
@@ -117,8 +177,9 @@ function createStatisticsTable() {
     document.getElementById('statistics_field').appendChild(table);
 }
 
-function createStatistics(period) {
-    const timegap = period==1? 12*60*60*1000: period==2? 24*30*60*60*1000 : Infinity; 
+function createStatistics(period,quantity) {
+    const timegap = period==1? 12*60*60*1000: period==2? 24*30*60*60*1000 : Infinity;
+    const quantatygap = quantity==2? 2 : quantity==3? 3 : quantity==4? 4 : quantity==5? 5 : quantity==6? 6 : 0;
     for (let i=0; i<workers.length; i+=1) {
         const arr1 = archive.filter((el)=> (el.player1 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot1)})
         const arr2 = archive.filter((el)=> (el.player2 == workers[i] && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.bestshot2)})
@@ -160,12 +221,12 @@ function createStatistics(period) {
         const arr5 = archive.filter((el)=> (el.player5 == workers[i] && !isNaN(el.avg1705) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1705)})
         const arr6 = archive.filter((el)=> (el.player6 == workers[i] && !isNaN(el.avg1706) && (new Date() - new Date(el.date) < timegap))).map((el)=> {return Number(el.avg1706)})
         let result = arr1.concat(arr2).concat(arr3).concat(arr4).concat(arr5).concat(arr6);
-        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[5].innerText = `${Math.max.apply(null, result)}`
+        if (result.length >0) document.querySelectorAll('.superrow_s')[i+1].children[5].innerText = `${Math.max.apply(null, result)} / ${Math.round(result.reduce((partialSum,a)=>partialSum + a,0)/result.length*10)/10}`
         else document.querySelectorAll('.superrow_s')[i+1].children[5].innerText = ``;
     }
     for (let i=0; i<workers.length; i+=1) {
         for (let j=0; j<workers.length; j+=1) {
-            const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0 && (el.losers*el.winners)%workers_id[j] == 0 && i!=j  && (new Date() - new Date(el.date) < timegap)).map((el)=> {
+            const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0 && (el.losers*el.winners)%workers_id[j] == 0 && i!=j  && (new Date() - new Date(el.date) < timegap) && (quantatygap==0? el.players>0: el.players == quantatygap)).map((el)=> {
                 return el.losers%workers_id[i]==0 && el.winners%workers_id[j]==0 ? -1: el.losers%workers_id[j]==0 && el.winners%workers_id[i]==0? 1 : 0; 
             })
             let positive = arr1.filter(elem =>(elem > 0)).length;
@@ -175,7 +236,7 @@ function createStatistics(period) {
         }
     }
     for (let i=0; i<workers.length; i+=1) {
-        const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0   && (new Date() - new Date(el.date) < timegap)).map((el)=> {
+        const arr1 = archive.filter((el)=> (el.losers*el.winners)%workers_id[i] == 0   && (new Date() - new Date(el.date) < timegap) && (quantatygap==0? el.players>0: el.players == quantatygap)).map((el)=> {
             return el.losers%workers_id[i]==0? -1: el.winners%workers_id[i]==0? 1 : 0; 
         })
         let positive = arr1.filter(elem =>(elem > 0)).length;

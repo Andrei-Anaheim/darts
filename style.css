@@ -305,10 +305,22 @@ select, option , input {
     width: 100vw;
 }
 
+.statistics_buttons_box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .statistics_buttons {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+
+.statistics_buttons_2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .time_button {
