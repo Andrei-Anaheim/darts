@@ -159,7 +159,7 @@ select, option , input {
     height: 25%;
     color: white;
     text-align: center;
-    font: normal bold 25px/25px Arial;
+    font: normal bold 23px/23px Arial;
 }
 
 .turn_info_container {
@@ -190,9 +190,28 @@ select, option , input {
 .change_button {
     margin-left: 10px;
     background-color: grey;
-    font: normal normal 20px/20px Arial;
+    font: normal normal 15px/20px Arial;
     cursor: pointer;
 }
+
+.legends {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 0px 5px;
+}
+
+.popular_counts {
+    padding: 5px;
+    margin: 5px;
+    font: normal bold 20px/20px Arial; 
+    border: 1px solid red;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: rgb(59, 58, 58);
+}
+
 
 .next_turn {
     background-color: red;
