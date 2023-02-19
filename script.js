@@ -585,6 +585,7 @@ function legendClick(legend_number) {
         }
         document.getElementById('darts').classList.add('disabled');
         document.getElementById('legends').classList.add('disabled');
+        document.getElementById('legends').classList.add('hide');
         document.getElementById('next_turn').classList.remove('disabled');
         dart_left = 0;
         updateLeft(legend_number, 150, current_player, dart_left);
@@ -596,6 +597,7 @@ document.getElementById('next_turn').addEventListener('click', newMove);
 function newMove() {
     document.getElementById('next_turn').classList.add('disabled');
     document.getElementById('legends').classList.remove('disabled');
+    document.getElementById('legends').classList.remove('hide');
     const sum = document.getElementById('throw_sum').innerText;
     player_points[current_player-1] -= sum;
     game_result[current_player-1].shots.push(Number(sum));
@@ -702,7 +704,9 @@ function delete1() {
         updateLeft(fix_number,10, current_player, dart_left);
         document.getElementById('throw_1').innerText = ``;
         document.getElementById('throw_1_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_1'));
+        if (document.getElementById('marker_1')) document.body.removeChild(document.getElementById('marker_1'));
+        document.getElementById('legends').classList.remove('disabled');
+        document.getElementById('legends').classList.remove('hide');
     }
     if (dart_left==1) {
         dart_left=2;
@@ -711,8 +715,10 @@ function delete1() {
         document.getElementById('throw_1').innerText = `${document.getElementById('throw_2').innerText}`;
         document.getElementById('throw_2').innerText = ``;
         document.getElementById('throw_2_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_1'));
-        document.getElementById('marker_2').id = 'marker_1';
+        if (document.getElementById('marker_1')) {
+            document.body.removeChild(document.getElementById('marker_1'));
+            document.getElementById('marker_2').id = 'marker_1';
+        }
     }
     if (dart_left==0) {
         document.getElementById('darts').classList.remove('disabled');
@@ -724,9 +730,11 @@ function delete1() {
         document.getElementById('throw_2').innerText = `${document.getElementById('throw_3').innerText}`;
         document.getElementById('throw_3').innerText = ``;
         document.getElementById('throw_3_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_1'));
-        document.getElementById('marker_2').id = 'marker_1';
-        document.getElementById('marker_3').id = 'marker_2';
+        if (document.getElementById('marker_1')) {
+            document.body.removeChild(document.getElementById('marker_1'));
+            document.getElementById('marker_2').id = 'marker_1';
+            document.getElementById('marker_3').id = 'marker_2';
+        }
     }
 }
 document.getElementById('delete_2').addEventListener('click',delete2)
@@ -737,7 +745,7 @@ function delete2() {
         updateLeft(fix_number,10, current_player, dart_left);
         document.getElementById('throw_2').innerText = ``;
         document.getElementById('throw_2_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_2'));
+        if (document.getElementById('marker_2')) document.body.removeChild(document.getElementById('marker_2'));
     }
     if (dart_left==0) {
         document.getElementById('darts').classList.remove('disabled');
@@ -748,8 +756,10 @@ function delete2() {
         document.getElementById('throw_2').innerText = `${document.getElementById('throw_3').innerText}`;
         document.getElementById('throw_3').innerText = ``;
         document.getElementById('throw_3_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_2'));
-        document.getElementById('marker_3').id = 'marker_2';
+        if (document.getElementById('marker_2')) {
+            document.body.removeChild(document.getElementById('marker_2'));
+            document.getElementById('marker_3').id = 'marker_2';
+        }
     }
 }
 document.getElementById('delete_3').addEventListener('click',delete3)
@@ -762,7 +772,7 @@ function delete3() {
         updateLeft(fix_number,10, current_player, dart_left);
         document.getElementById('throw_3').innerText = ``;
         document.getElementById('throw_3_container').classList.add('hide');
-        document.body.removeChild(document.getElementById('marker_3'));
+        if (document.getElementById('marker_3')) document.body.removeChild(document.getElementById('marker_3'));
     }
 }
 
