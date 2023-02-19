@@ -531,67 +531,71 @@ document.getElementById('legend_41').addEventListener('click', ()=>{legendClick(
 document.getElementById('legend_60').addEventListener('click', ()=>{legendClick(60)})
 
 function legendClick(legend_number) {
-    if(legend_number == 0) {
-        document.getElementById('throw_1').innerText = '0';
-        document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_1_real').innerText="1";
-        document.getElementById('throw_2').innerText = '0';
-        document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_2_real').innerText="1";
-        document.getElementById('throw_3').innerText = '0';
-        document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_3_real').innerText="1";
-    } else if(legend_number == 22) {
-        document.getElementById('throw_1').innerText = '20';
-        document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_1_real').innerText="1";
-        document.getElementById('throw_2').innerText = '1';
-        document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_2_real').innerText="1";
-        document.getElementById('throw_3').innerText = '1';
-        document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_3_real').innerText="1";
-    } else if(legend_number == 26) {
-        document.getElementById('throw_1').innerText = '20';
-        document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_1_real').innerText="1";
-        document.getElementById('throw_2').innerText = '5';
-        document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_2_real').innerText="1";
-        document.getElementById('throw_3').innerText = '1';
-        document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_3_real').innerText="1";
-    } else if(legend_number == 41) {
-        document.getElementById('throw_1').innerText = '20';
-        document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_1_real').innerText="1";
-        document.getElementById('throw_2').innerText = '20';
-        document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_2_real').innerText="1";
-        document.getElementById('throw_3').innerText = '1';
-        document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_3_real').innerText="1";
-    } else if(legend_number == 60) {
-        document.getElementById('throw_1').innerText = '20';
-        document.getElementById('throw_1_container').classList.remove('hide');
-        document.getElementById('throw_1_real').innerText="1";
-        document.getElementById('throw_2').innerText = '20';
-        document.getElementById('throw_2_container').classList.remove('hide');
-        document.getElementById('throw_2_real').innerText="1";
-        document.getElementById('throw_3').innerText = '20';
-        document.getElementById('throw_3_container').classList.remove('hide');
-        document.getElementById('throw_3_real').innerText="1";
-    }
-    document.getElementById('darts').classList.add('disabled');
-    document.getElementById('next_turn').classList.remove('disabled');
-    dart_left = 0;
-    updateLeft(legend_number, 150, current_player, dart_left);
+    if(dart_left==3){
+        if(legend_number == 0) {
+            document.getElementById('throw_1').innerText = '0';
+            document.getElementById('throw_1_container').classList.remove('hide');
+            document.getElementById('throw_1_real').innerText="1";
+            document.getElementById('throw_2').innerText = '0';
+            document.getElementById('throw_2_container').classList.remove('hide');
+            document.getElementById('throw_2_real').innerText="1";
+            document.getElementById('throw_3').innerText = '0';
+            document.getElementById('throw_3_container').classList.remove('hide');
+            document.getElementById('throw_3_real').innerText="1";
+        } else if(legend_number == 22) {
+            document.getElementById('throw_1').innerText = '20';
+            document.getElementById('throw_1_container').classList.remove('hide');
+            document.getElementById('throw_1_real').innerText="1";
+            document.getElementById('throw_2').innerText = '1';
+            document.getElementById('throw_2_container').classList.remove('hide');
+            document.getElementById('throw_2_real').innerText="1";
+            document.getElementById('throw_3').innerText = '1';
+            document.getElementById('throw_3_container').classList.remove('hide');
+            document.getElementById('throw_3_real').innerText="1";
+        } else if(legend_number == 26) {
+            document.getElementById('throw_1').innerText = '20';
+            document.getElementById('throw_1_container').classList.remove('hide');
+            document.getElementById('throw_1_real').innerText="1";
+            document.getElementById('throw_2').innerText = '5';
+            document.getElementById('throw_2_container').classList.remove('hide');
+            document.getElementById('throw_2_real').innerText="1";
+            document.getElementById('throw_3').innerText = '1';
+            document.getElementById('throw_3_container').classList.remove('hide');
+            document.getElementById('throw_3_real').innerText="1";
+        } else if(legend_number == 41) {
+            document.getElementById('throw_1').innerText = '20';
+            document.getElementById('throw_1_container').classList.remove('hide');
+            document.getElementById('throw_1_real').innerText="1";
+            document.getElementById('throw_2').innerText = '20';
+            document.getElementById('throw_2_container').classList.remove('hide');
+            document.getElementById('throw_2_real').innerText="1";
+            document.getElementById('throw_3').innerText = '1';
+            document.getElementById('throw_3_container').classList.remove('hide');
+            document.getElementById('throw_3_real').innerText="1";
+        } else if(legend_number == 60) {
+            document.getElementById('throw_1').innerText = '20';
+            document.getElementById('throw_1_container').classList.remove('hide');
+            document.getElementById('throw_1_real').innerText="1";
+            document.getElementById('throw_2').innerText = '20';
+            document.getElementById('throw_2_container').classList.remove('hide');
+            document.getElementById('throw_2_real').innerText="1";
+            document.getElementById('throw_3').innerText = '20';
+            document.getElementById('throw_3_container').classList.remove('hide');
+            document.getElementById('throw_3_real').innerText="1";
+        }
+        document.getElementById('darts').classList.add('disabled');
+        document.getElementById('legends').classList.add('disabled');
+        document.getElementById('next_turn').classList.remove('disabled');
+        dart_left = 0;
+        updateLeft(legend_number, 150, current_player, dart_left);
+    }   
 }
 
 /* Переход хода */
 document.getElementById('next_turn').addEventListener('click', newMove);
 function newMove() {
     document.getElementById('next_turn').classList.add('disabled');
+    document.getElementById('legends').classList.remove('disabled');
     const sum = document.getElementById('throw_sum').innerText;
     player_points[current_player-1] -= sum;
     game_result[current_player-1].shots.push(Number(sum));
