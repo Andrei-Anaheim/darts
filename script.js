@@ -442,6 +442,8 @@ function nextTurn() {
 /*Бросок дротика*/
 document.getElementById('darts').addEventListener('click', (e) => {throwDart(e)});
 function throwDart(e) {
+    document.getElementById('legends').classList.add('disabled');
+    document.getElementById('legends').classList.add('hide');
     let result = 0;
     const c = {x: darts_center_x, y: darts_center_y}
     const p0 = {x: e.clientX, y: e.clientY};
